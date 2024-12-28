@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Developer",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main.dart",
+            "args": [
+                "--target", "lib/main.dart",
+                "--dart-define-from-file", "env/dev-env.json"
+            ]
+        },
+    ]
+}
