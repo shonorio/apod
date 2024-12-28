@@ -12,5 +12,20 @@
                 "--dart-define-from-file", "env/dev-env.json"
             ]
         },
+        {
+            "name": "Flutter Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test",
+            "flutterMode": "debug",
+            "codeLens": {
+                "title": "${debugType} (Coverage)",
+                "for": ["run-test", "run-test-file"]
+            },
+            "toolArgs": [
+              "--dart-define-from-file=test/data/test-env.json",
+              "--coverage"
+            ]
+        }
     ]
 }
