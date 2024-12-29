@@ -154,55 +154,132 @@ void main() {
       });
 
       group('properties and methods', () {
-        test('getOrDefault should return the value when not null', () {
+        test('getOrElse should return the value when not null', () {
+          final value1 = 'success';
+          final success = Success<String, Exception>(value1);
+
+          expect(success.getOrElse((_) => 'default'), equals(value1));
+        });
+
+        test('getValueOr should return the value when not null', () {
           final value1 = 'success';
           final success = Success<String, Exception>(value1);
 
           expect(success.getValueOr('default'), equals(value1));
         });
-      });
-    });
-  });
 
-  group(Failure, () {
-    group('equality', () {
-      test('return true if both failures have the same exception', () {
-        final ex1 = Exception('error');
-        final failure1 = Failure(ex1);
-        final failure2 = Failure(ex1);
+        test('getError should return null if the result is a success', () {
+          final value1 = 'success';
+          final success = Success<String, Exception>(value1);
 
-        expect(failure1 == failure2, isTrue);
-      });
-
-      test('return false if both failures have different exceptions', () {
-        final ex1 = Exception('error1');
-        final ex2 = Exception('error2');
-        final failure1 = Failure(ex1);
-        final failure2 = Failure(ex2);
-
-        expect(failure1 == failure2, isFalse);
-      });
-
-      test('return false if the other object is not a Failure', () {
-        final ex1 = Exception('error');
-        final failure = Failure(ex1);
-        final otherObject = Object();
-
-        expect(failure == otherObject, isFalse);
-      });
-
-      test('return true for self-equality', () {
-        final ex1 = Exception('error');
-        final failure = Failure(ex1);
-
-        expect(failure == failure, isTrue);
+          expect(success.getError(), isNull);
+        });
       });
     });
 
-    group('properties and methods', () {
-      test('getOrDefault should return "defaultValue', () {
-        final failure = Failure(Exception('failure'));
-        expect(failure.getValueOr('default'), equals('default'));
+    group(Failure, () {
+      group('equality', () {
+        test('return true if both failures have the same exception', () {
+          final ex1 = Exception('error');
+          final failure1 = Failure(ex1);
+          final failure2 = Failure(ex1);
+
+          expect(failure1 == failure2, isTrue);
+        });
+
+        test('return false if both failures have different exceptions', () {
+          final ex1 = Exception('error1');
+          final ex2 = Exception('error2');
+          final failure1 = Failure(ex1);
+          final failure2 = Failure(ex2);
+
+          expect(failure1 == failure2, isFalse);
+        });
+
+        test('return false if the other object is not a Failure', () {
+          final ex1 = Exception('error');
+          final failure = Failure(ex1);
+          final otherObject = Object();
+
+          expect(failure == otherObject, isFalse);
+        });
+
+        test('return true for self-equality', () {
+          final ex1 = Exception('error');
+          final failure = Failure(ex1);
+
+          expect(failure == failure, isTrue);
+        });
+      });
+
+      group('properties and methods', () {
+        test('getOrElse should return value from onError callback', () {
+          final ex = Exception('error');
+          final failure = Failure<String, Exception>(ex);
+          final fallbackValue = 'fallback';
+
+          expect(
+            failure.getOrElse((error) => fallbackValue),
+            equals(fallbackValue),
+          );
+        });
+
+        test('getValueOr should return "defaultValue', () {
+          final failure = Failure(Exception('failure'));
+          expect(failure.getValueOr('default'), equals('default'));
+        });
+
+        test('getError should return the error', () {
+          final ex1 = Exception('error');
+          final failure = Failure(ex1);
+
+          expect(failure.getError(), equals(ex1));
+        });
+      });
+    });
+    group(AsyncResult, () {
+      test('should return a Success if the operation succeeds', () async {
+        final value = 'success';
+        final asyncResult =
+            AsyncResult<String, Exception>(() async => Success(value));
+
+        expect(await asyncResult, isA<Success<String, Exception>>());
+      });
+
+      test('should return a Failure if the operation fails', () async {
+        final ex = Exception('error');
+        final asyncResult =
+            AsyncResult<String, Exception>(() async => Failure(ex));
+
+        expect(await asyncResult, isA<Failure<String, Exception>>());
+      });
+
+      test('getValueOr should return value if Success', () async {
+        final value = 'success';
+        final asyncResult =
+            AsyncResult<String, Exception>(() async => Success(value));
+
+        expect(await asyncResult.getValueOr('default'), equals(value));
+      });
+
+      test('getValueOr should return defaultValue if Failure', () async {
+        final ex = Exception('error');
+        final asyncResult =
+            AsyncResult<String, Exception>(() async => Failure(ex));
+        final defaultValue = 'default';
+
+        expect(
+            await asyncResult.getValueOr(defaultValue), equals(defaultValue));
+      });
+
+      test('getOrElse should return value from onError callback', () async {
+        final ex = Exception('error');
+        final asyncResult =
+            AsyncResult<String, Exception>(() async => Failure(ex));
+        final fallbackValue = 'fallback';
+
+        expect(await asyncResult.getOrElse((error) => fallbackValue),
+            equals(fallbackValue));
       });
     });
   });

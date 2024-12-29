@@ -17,6 +17,9 @@ sealed class Result<S extends Object, E extends Exception> {
 
   /// Returns the value if the operation succeeded, or a default [defaultValue] if it failed.
   S getValueOr(S defaultValue);
+
+  /// Returns the value of [Failure] or null.
+  E? getError();
 }
 
 /// Represents a successful result of an operation.
@@ -66,6 +69,9 @@ class Success<S extends Object, E extends Exception> extends Result<S, E> {
 
     return data == other.data;
   }
+
+  @override
+  E? getError() => null;
 }
 
 /// Represents a failed result of an operation.
@@ -73,41 +79,46 @@ class Success<S extends Object, E extends Exception> extends Result<S, E> {
 /// Holds the error of type [E] that caused the operation to fail.
 class Failure<S extends Object, E extends Exception> extends Result<S, E> {
   /// Creates a [Failure] instance with the given [error].
-  const Failure(this.error);
+  const Failure(this._error);
 
   /// The error that caused the operation to fail.
-  final E error;
+  final E _error;
 
   @override
-  S getOrElse(S Function(E error) onError) => onError(error);
+  S getOrElse(S Function(E error) onError) => onError(_error);
 
   @override
   S getValueOr(S defaultValue) => defaultValue;
 
   @override
-  int get hashCode => error.hashCode;
+  int get hashCode => _error.hashCode;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! Failure<S, E>) return false;
-    return error == other.error;
+    return _error == other._error;
   }
+
+  @override
+  E? getError() => _error;
 }
 
 /// A typedef for asynchronous operations returning a [Result].
 ///
 /// Represents an operation that produces a [Result] asynchronously.
 /// The success type is [S], and the error is always an [Exception].
-typedef AsyncResult<S extends Object> = Future<Result<S, Exception>>;
+typedef AsyncResult<S extends Object, E extends Exception>
+    = Future<Result<S, E>>;
 
 /// Extensions on [AsyncResult] for convenient chaining and error handling.
-extension AsyncResultExtension<S extends Object> on AsyncResult<S> {
+extension AsyncResultExtension<S extends Object, E extends Exception>
+    on AsyncResult<S, E> {
   /// Returns the value if the operation succeeded, or a default [defaultValue] if it failed.
   Future<S> getValueOr(S defaultValue) =>
       then((result) => result.getOrElse((_) => defaultValue));
 
   /// Returns the value if the operation succeeded, or computes a fallback value using [onError] if it failed.
-  Future<S> getOrElse(S Function(Exception error) onError) =>
+  Future<S> getOrElse(S Function(E) onError) =>
       then((result) => result.getOrElse(onError));
 }
