@@ -24,20 +24,26 @@ final class PictureOfDayRequestBuilder implements ApiRequestBuilder {
       'thumbs': 'true',
     };
 
-    if (date != null) {
+    if (date != null && date!.isBefore(DateTime.now())) {
       queryParams['date'] = date!.toYYYYMMDD();
     }
 
     if (count != null) {
       queryParams.remove('date');
-      queryParams['count'] = count.toString();
+      final validCount = count! < 1 ? 1 : (count! > 100 ? 100 : count!);
+      queryParams['count'] = validCount.toString();
     }
 
     if (startDate != null && endDate != null) {
-      queryParams.remove('date');
-      queryParams.remove('count');
-      queryParams['start_date'] = startDate!.toYYYYMMDD();
-      queryParams['end_date'] = endDate!.toYYYYMMDD();
+      final now = DateTime.now();
+      if (startDate!.isBefore(now) &&
+          endDate!.isBefore(now) &&
+          endDate!.isAfter(startDate!)) {
+        queryParams.remove('date');
+        queryParams.remove('count');
+        queryParams['start_date'] = startDate!.toYYYYMMDD();
+        queryParams['end_date'] = endDate!.toYYYYMMDD();
+      }
     }
 
     return ApiRequest(
