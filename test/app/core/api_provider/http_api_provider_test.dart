@@ -23,6 +23,7 @@ void main() {
   const path = '/api';
   final getBodyResponse =
       File('test/data/stream_body_msg.json').readAsStringSync();
+  const bodyMsgPath = 'test/data/json/stream_body_msg.json';
 
   setUpAll(() async {
     registerFallbackValue(Uri.http(authority, path));
@@ -48,7 +49,7 @@ void main() {
       'must configure uri and header correct',
       () async {
         // arrange
-        final inputStream = File('test/data/stream_body_msg.json').openRead();
+        final inputStream = File(bodyMsgPath).openRead();
         final http.Client apiClient = MockHttpClient();
         when(() => apiClient.send(any())).thenAnswer(
             (_) async => http.StreamedResponse(inputStream, HttpStatus.ok));
@@ -81,7 +82,7 @@ void main() {
       () async {
         // arrange
         final http.Client apiClient = MockHttpClient();
-        final inputStream = File('test/data/stream_body_msg.json').openRead();
+        final inputStream = File(bodyMsgPath).openRead();
 
         when(() => apiClient.send(any())).thenAnswer(
             (_) async => http.StreamedResponse(inputStream, HttpStatus.ok));
@@ -111,9 +112,8 @@ void main() {
       () async {
         // arrange
         final http.Client apiClient = MockHttpClient();
-        final inputStream = File('test/data/stream_body_msg.json').openRead();
-        final postBodyResponse =
-            File('test/data/stream_body_msg.json').readAsStringSync();
+        final inputStream = File(bodyMsgPath).openRead();
+        final postBodyResponse = File(bodyMsgPath).readAsStringSync();
         when(() => apiClient.send(any())).thenAnswer(
             (_) async => http.StreamedResponse(inputStream, HttpStatus.ok));
 
@@ -152,7 +152,7 @@ void main() {
 
         for (final httpCode in nonSuccessfulHttpCode) {
           // arrange
-          final inputStream = File('test/data/stream_body_msg.json').openRead();
+          final inputStream = File(bodyMsgPath).openRead();
 
           final http.Client apiClient = MockHttpClient();
           when(() => apiClient.send(any())).thenAnswer(
@@ -183,9 +183,8 @@ void main() {
       () async {
         // arrange
         final http.Client apiClient = MockHttpClient();
-        final inputStream = File('test/data/stream_body_msg.json').openRead();
-        final deleteBodyResponse =
-            File('test/data/stream_body_msg.json').readAsStringSync();
+        final inputStream = File(bodyMsgPath).openRead();
+        final deleteBodyResponse = File(bodyMsgPath).readAsStringSync();
         when(() => apiClient.send(any())).thenAnswer(
             (_) async => http.StreamedResponse(inputStream, HttpStatus.ok));
 
@@ -221,9 +220,8 @@ void main() {
       () async {
         // arrange
         final http.Client apiClient = MockHttpClient();
-        final inputStream = File('test/data/stream_body_msg.json').openRead();
-        final deleteBodyResponse =
-            File('test/data/stream_body_msg.json').readAsStringSync();
+        final inputStream = File(bodyMsgPath).openRead();
+        final deleteBodyResponse = File(bodyMsgPath).readAsStringSync();
         when(() => apiClient.send(any())).thenAnswer(
             (_) async => http.StreamedResponse(inputStream, HttpStatus.ok));
 
@@ -315,7 +313,7 @@ void main() {
     test('throws ApiProviderRateLimitException when rate limit exceeded',
         () async {
       // arrange
-      final inputStream = File('test/data/stream_body_msg.json').openRead();
+      final inputStream = File(bodyMsgPath).openRead();
       final http.Client apiClient = MockHttpClient();
       when(() => apiClient.send(any()))
           .thenAnswer((_) async => http.StreamedResponse(
