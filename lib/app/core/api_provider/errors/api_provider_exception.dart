@@ -81,3 +81,13 @@ final class NetworkReachabilityException extends Error {
   /// OS-specific error message, if available.
   final String? osErrorMessage;
 }
+
+final class ApiProviderRateLimitException extends ApiProviderException {
+  ApiProviderRateLimitException(String message)
+      : super(
+          ApiResponse(
+            body: message,
+            statusCode: 429,
+          ),
+        );
+}

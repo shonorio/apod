@@ -59,16 +59,14 @@ final class HttpApiProvider implements ApiProvider {
     try {
       final response = await _execute(request, _buildHeader(request));
       return _parseResponse(response);
+    } on SocketException catch (e) {
+      throw NetworkReachabilityException(
+        request.baseUrl.toString(),
+        e.message,
+        e.osError?.errorCode,
+        e.osError?.message,
+      );
     } catch (e) {
-      if (e is SocketException) {
-        throw NetworkReachabilityException(
-          request.baseUrl.toString(),
-          e.message,
-          e.osError?.errorCode,
-          e.osError?.message,
-        );
-      }
-
       throw ApiProviderInternalException(e.toString());
     }
   }
@@ -113,6 +111,20 @@ final class HttpApiProvider implements ApiProvider {
   Future<ApiResponse> _parseResponse(http.StreamedResponse response) async {
     return response.stream.bytesToString().then((body) {
       final httpStatusCode = response.statusCode;
+
+      // Case insensitive check for rate limit remaining from headers
+      final rateLimitKey = response.headers.keys.firstWhere(
+        (key) => key.toLowerCase() == 'x-ratelimit-remaining',
+        orElse: () => '',
+      );
+      if (rateLimitKey.isNotEmpty) {
+        final remaining =
+            int.tryParse(response.headers[rateLimitKey] ?? '') ?? 0;
+        if (remaining <= 0) {
+          throw ApiProviderRateLimitException('Rate limit exceeded');
+        }
+      }
+
       final apiResponse = ApiResponse(
         body: body,
         statusCode: httpStatusCode,

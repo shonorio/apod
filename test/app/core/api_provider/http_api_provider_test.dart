@@ -311,5 +311,31 @@ void main() {
         );
       },
     );
+
+    test('throws ApiProviderRateLimitException when rate limit exceeded',
+        () async {
+      // arrange
+      final inputStream = File('test/data/stream_body_msg.json').openRead();
+      final http.Client apiClient = MockHttpClient();
+      when(() => apiClient.send(any()))
+          .thenAnswer((_) async => http.StreamedResponse(
+                inputStream,
+                200,
+                headers: {
+                  'X-RateLimit-Limit': '1000',
+                  'X-RateLimit-Remaining': '0',
+                },
+              ));
+
+      final sut = HttpApiProvider(
+        client: apiClient,
+        apiConfiguration: apiConfiguration,
+      );
+
+      expect(
+        () async => await sut.request(getRequestBuilder),
+        throwsA(isA<ApiProviderRateLimitException>()),
+      );
+    });
   });
 }
