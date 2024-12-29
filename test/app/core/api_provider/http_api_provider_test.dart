@@ -22,7 +22,7 @@ void main() {
   const authority = 'example.org';
   const path = '/api';
   final getBodyResponse =
-      File('test/data/stream_body_msg.json').readAsStringSync();
+      File('test/data/json/stream_body_msg.json').readAsStringSync();
   const bodyMsgPath = 'test/data/json/stream_body_msg.json';
 
   setUpAll(() async {
