@@ -15,10 +15,10 @@ final class PictureOfDayRequestBuilder implements ApiRequestBuilder {
   final DateTime? endDate;
   final int? count;
 
-  final String apiKey = AppEnvironment.nasaApiToken();
-
   @override
   buildRequest(Uri baseUri) {
+    final String apiKey = AppEnvironment.nasaApiToken();
+
     final queryParams = {
       'api_key': apiKey,
       'thumbs': 'true',
