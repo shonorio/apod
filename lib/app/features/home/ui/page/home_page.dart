@@ -1,3 +1,5 @@
+import 'package:apod/app/features/home/ui/widgets/home_compact_widget.dart';
+import 'package:apod/app/features/home/ui/widgets/home_expanded_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -19,22 +21,22 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: RouterOutlet(),
-      bottomNavigationBar: NavigationBar(
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.photo),
-            label: 'Picture of the Day',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
-          ),
-        ],
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: _onDestinationSelected,
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 600) {
+          return HomeExpandedWidget(
+            body: RouterOutlet(),
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: _onDestinationSelected,
+          );
+        } else {
+          return HomeCompactWidget(
+            body: RouterOutlet(),
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: _onDestinationSelected,
+          );
+        }
+      },
     );
   }
 
