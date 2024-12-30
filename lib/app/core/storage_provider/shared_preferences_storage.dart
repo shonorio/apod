@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'storage_provider.dart';
 
@@ -7,19 +9,25 @@ class SharedPreferencesStorage implements StorageProvider {
   SharedPreferencesStorage(this._storage);
 
   @override
-  Future<bool> create(String id, String value) async {
-    return await _storage.setString(id, value);
+  Future<bool> create(String id, Map<String, dynamic> value) async {
+    return await _storage.setString(id, jsonEncode(value));
   }
 
   @override
-  Future<List<String>> fetch({String? id}) async {
+  Future<List<Map<String, dynamic>>> fetch({String? id}) async {
     if (id != null) {
-      final value = _storage.getString(id);
-      return value != null ? [value] : [];
+      return _storage.getString(id) != null
+          ? [jsonDecode(_storage.getString(id)!) as Map<String, dynamic>]
+          : [];
     }
 
-    final allKeys = _storage.getKeys();
-    return allKeys.map((key) => _storage.getString(key)!).toList();
+    return _storage
+        .getKeys()
+        .map(_storage.getString)
+        .whereType<String>()
+        .map(jsonDecode)
+        .cast<Map<String, dynamic>>()
+        .toList();
   }
 
   @override
