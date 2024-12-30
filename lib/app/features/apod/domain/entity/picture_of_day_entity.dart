@@ -6,22 +6,22 @@ final class PictureOfDayEntity extends Equatable {
   const PictureOfDayEntity({
     required this.date,
     required this.explanation,
-    required this.hdUrl,
     required this.mediaType,
     required this.serviceVersion,
     required this.title,
     required this.url,
+    this.hdUrl,
     this.copyright,
     this.thumbnailUrl,
   });
 
   final DateTime date;
   final String explanation;
-  final String hdUrl;
   final MediaType mediaType;
   final String serviceVersion;
   final String title;
   final String url;
+  final String? hdUrl;
   final String? copyright;
   final String? thumbnailUrl;
 
@@ -29,11 +29,11 @@ final class PictureOfDayEntity extends Equatable {
     return PictureOfDayEntity(
       date: DateTime.parse(json['date'] as String),
       explanation: json['explanation'] as String,
-      hdUrl: json['hdurl'] as String,
       mediaType: MediaType.fromString(json['media_type'] as String),
       serviceVersion: json['service_version'] as String,
       title: json['title'] as String,
       url: json['url'] as String,
+      hdUrl: json['hdurl'] as String?,
       copyright: json['copyright'] as String?,
       thumbnailUrl: json['thumbnail_url'] as String?,
     );
