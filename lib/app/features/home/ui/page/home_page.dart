@@ -9,6 +9,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -31,7 +32,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Favorites',
           ),
         ],
-        selectedIndex: 0,
+        selectedIndex: _selectedIndex,
         onDestinationSelected: _onDestinationSelected,
       ),
     );
@@ -43,5 +44,9 @@ class _HomePageState extends State<HomePage> {
     } else {
       Modular.to.navigate('/favorites');
     }
+
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 }
