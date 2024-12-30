@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    Modular.to.navigate('/apod');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-      ),
-      body: const Center(
-        child: Text('Picture of the Day'),
-      ),
+      body: RouterOutlet(),
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(
@@ -24,8 +32,16 @@ class HomePage extends StatelessWidget {
           ),
         ],
         selectedIndex: 0,
-        onDestinationSelected: (index) {},
+        onDestinationSelected: _onDestinationSelected,
       ),
     );
+  }
+
+  void _onDestinationSelected(int index) {
+    if (index == 0) {
+      Modular.to.navigate('/apod');
+    } else {
+      Modular.to.navigate('/favorites');
+    }
   }
 }
