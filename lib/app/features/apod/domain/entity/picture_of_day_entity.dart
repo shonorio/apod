@@ -54,4 +54,18 @@ final class PictureOfDayEntity extends Equatable {
 
   @override
   bool? get stringify => true;
+
+  Json toJson() {
+    return {
+      'date': date.toIso8601String(),
+      'explanation': explanation,
+      'hdurl': hdUrl,
+      'media_type': mediaType.toString(),
+      'service_version': serviceVersion,
+      'title': title,
+      'url': url,
+      'copyright': copyright,
+      'thumbnail_url': thumbnailUrl,
+    };
+  }
 }
