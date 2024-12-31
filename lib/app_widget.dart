@@ -9,10 +9,15 @@ class AppWidget extends StatelessWidget {
     return MaterialApp.router(
       title: 'APOD',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+      theme: ThemeData(useMaterial3: true),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.white,
+          brightness: Brightness.dark,
+        ),
         useMaterial3: true,
       ),
+      themeMode: ThemeMode.system,
       routerConfig: Modular.routerConfig,
     );
   }
