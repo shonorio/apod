@@ -23,12 +23,14 @@ class PictureOfDayTitleWidget extends StatelessWidget {
         children: [
           Text(
             pictureOfDayEntity.title,
-            style: context.textTheme.titleLarge,
+            style: context.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             date,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
           ),

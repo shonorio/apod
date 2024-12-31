@@ -35,7 +35,7 @@ class PictureOfDayMediaWidget extends StatelessWidget {
           if (pictureOfDayEntity.copyright != null)
             Text(
               'Copyright ${pictureOfDayEntity.copyright!.trim()}',
-              style: context.textTheme.labelSmall,
+              style: context.textTheme.bodySmall,
             ),
         ],
       ),
