@@ -60,7 +60,7 @@ class _ImageWidget extends StatelessWidget {
             onTap: () => _showFullScreenImage(context),
             child: CachedNetworkImage(
               placeholder: (context, url) =>
-                  const Center(child: CircularProgressIndicator()),
+                  const Center(child: CircularProgressIndicator.adaptive()),
               errorWidget: (context, url, error) =>
                   const Center(child: Icon(Icons.error)),
               imageUrl: url,
