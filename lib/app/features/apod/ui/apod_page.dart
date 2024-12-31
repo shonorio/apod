@@ -27,6 +27,28 @@ class ApodPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Picture of the Day'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.calendar_today),
+            onPressed: () async {
+              final firstApodPublishedDate = DateTime(1995, 6, 16);
+
+              final selectedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: firstApodPublishedDate,
+                lastDate: DateTime.now(),
+              );
+              if (selectedDate != null) {
+                print(selectedDate);
+              }
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
