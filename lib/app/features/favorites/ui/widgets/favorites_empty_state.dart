@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class EmptyStateWidget extends StatelessWidget {
-  const EmptyStateWidget({super.key});
+class FavoritesEmptyState extends StatelessWidget {
+  const FavoritesEmptyState({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,21 +10,19 @@ class EmptyStateWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(
-            Icons.image_not_supported_outlined,
+            Icons.favorite_border,
             size: 64,
             color: Colors.grey,
           ),
           const SizedBox(height: 16),
           Text(
-            'No picture available',
+            'No favorites yet',
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 8),
-          Text(
-            'Try selecting another date',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey,
-                ),
+          const Text(
+            'Your favorite astronomy pictures will appear here',
+            textAlign: TextAlign.center,
           ),
         ],
       ),
