@@ -1,11 +1,14 @@
 import 'package:apod/app/features/apod/ui/apod_page.dart';
 import 'package:apod/app/features/favorites/ui/favorites_page.dart';
+import 'package:apod/app/features/favorites/ui/favorites_page_controller.dart';
 import 'package:apod/app/features/home/ui/page/home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module {
   @override
-  void binds(Injector i) {}
+  void binds(Injector i) {
+    i.add(FavoritesPageController.new);
+  }
 
   @override
   void routes(RouteManager r) {
@@ -17,7 +20,9 @@ class AppModule extends Module {
       ),
       ChildRoute(
         '/favorites',
-        child: (context) => const FavoritesPage(),
+        child: (context) => FavoritesPage(
+          controller: Modular.get<FavoritesPageController>(),
+        ),
         transition: TransitionType.noTransition,
       ),
     ]);
