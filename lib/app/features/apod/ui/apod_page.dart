@@ -30,6 +30,7 @@ class ApodPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PictureOfDayMediaWidget(pictureOfDayEntity: pictureOfDayEntity),
             PictureOfDayTitleWidget(pictureOfDayEntity: pictureOfDayEntity),
