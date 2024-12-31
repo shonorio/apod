@@ -26,7 +26,7 @@ void main() {
       // verify specific content
       expect(
           find.text('Andromeda Galaxy: A Neighboring Spiral'), findsOneWidget);
-      expect(find.text('Copyright Kristina Makeeva'), findsOneWidget);
+      expect(find.text('Copyright © Kristina Makeeva'), findsOneWidget);
       expect(
         find.textContaining('What are these bubbles frozen into Lake Baikal?'),
         findsOneWidget,
