@@ -17,25 +17,9 @@ class PictureOfDayMediaWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: AspectRatio(
-                aspectRatio: 1.8,
-                child: GestureDetector(
-                  onTap: () => _showFullScreenImage(context),
-                  child: CachedNetworkImage(
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) =>
-                        const Center(child: Icon(Icons.error)),
-                    imageUrl: pictureOfDayEntity.url,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
+          _ImageWidget(
+            url: pictureOfDayEntity.url,
+            hdUrl: pictureOfDayEntity.hdUrl,
           ),
           if (pictureOfDayEntity.copyright != null)
             Text(
@@ -43,6 +27,40 @@ class PictureOfDayMediaWidget extends StatelessWidget {
               style: context.textTheme.bodySmall,
             ),
         ],
+      ),
+    );
+  }
+}
+
+class _ImageWidget extends StatelessWidget {
+  const _ImageWidget({
+    required this.url,
+    required this.hdUrl,
+  });
+
+  final String url;
+  final String? hdUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: AspectRatio(
+          aspectRatio: 1.8,
+          child: GestureDetector(
+            onTap: () => _showFullScreenImage(context),
+            child: CachedNetworkImage(
+              placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) =>
+                  const Center(child: Icon(Icons.error)),
+              imageUrl: url,
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -55,7 +73,7 @@ class PictureOfDayMediaWidget extends StatelessWidget {
           children: [
             PhotoView(
               imageProvider: CachedNetworkImageProvider(
-                pictureOfDayEntity.hdUrl ?? pictureOfDayEntity.url,
+                hdUrl ?? url,
               ),
               minScale: PhotoViewComputedScale.contained,
               maxScale: PhotoViewComputedScale.covered * 2,
