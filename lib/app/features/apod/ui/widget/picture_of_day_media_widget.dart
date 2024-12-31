@@ -51,7 +51,7 @@ class _ImageWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: AspectRatio(
-          aspectRatio: 1.8,
+          aspectRatio: 16 / 9,
           child: GestureDetector(
             onTap: () => _showFullScreenImage(context),
             child: CachedNetworkImage(
@@ -106,7 +106,7 @@ class _VideoWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: AspectRatio(
-          aspectRatio: 1.8,
+          aspectRatio: 16 / 9,
           child: const Placeholder(),
         ),
       ),
