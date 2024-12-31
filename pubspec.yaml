@@ -19,6 +19,7 @@ dependencies:
   flutter_modular: 6.3.4
   intl: 0.20.1
   photo_view: 0.14.0
+  cached_network_image: 3.4.1
 
 dev_dependencies:
   flutter_test:
