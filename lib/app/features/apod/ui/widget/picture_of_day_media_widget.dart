@@ -23,7 +23,7 @@ class PictureOfDayMediaWidget extends StatelessWidget {
           ),
           if (pictureOfDayEntity.copyright != null)
             Text(
-              'Copyright ${pictureOfDayEntity.copyright!.trim()}',
+              'Copyright © ${pictureOfDayEntity.copyright!.trim().split('\n').join(' / ')}',
               style: context.textTheme.bodySmall,
             ),
         ],
