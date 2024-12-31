@@ -1,6 +1,7 @@
 import 'package:apod/app/core/extentions/build_context.dart';
 import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class PictureOfDayMediaWidget extends StatelessWidget {
   const PictureOfDayMediaWidget({super.key, required this.pictureOfDayEntity});
@@ -21,9 +22,12 @@ class PictureOfDayMediaWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.0),
               child: AspectRatio(
                 aspectRatio: 1.8,
-                child: Image.network(
-                  pictureOfDayEntity.url,
-                  fit: BoxFit.fill,
+                child: GestureDetector(
+                  onTap: () => _showFullScreenImage(context),
+                  child: Image.network(
+                    pictureOfDayEntity.url,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),
@@ -34,6 +38,33 @@ class PictureOfDayMediaWidget extends StatelessWidget {
               style: context.textTheme.labelSmall,
             ),
         ],
+      ),
+    );
+  }
+
+  void _showFullScreenImage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog.fullscreen(
+        child: Stack(
+          children: [
+            PhotoView(
+              imageProvider: NetworkImage(
+                pictureOfDayEntity.hdUrl ?? pictureOfDayEntity.url,
+              ),
+              minScale: PhotoViewComputedScale.contained,
+              maxScale: PhotoViewComputedScale.covered * 2,
+            ),
+            Positioned(
+              top: 16,
+              right: 16,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
