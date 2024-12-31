@@ -1,5 +1,6 @@
 import 'package:apod/app/core/extentions/build_context.dart';
 import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -24,8 +25,12 @@ class PictureOfDayMediaWidget extends StatelessWidget {
                 aspectRatio: 1.8,
                 child: GestureDetector(
                   onTap: () => _showFullScreenImage(context),
-                  child: Image.network(
-                    pictureOfDayEntity.url,
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Center(child: Icon(Icons.error)),
+                    imageUrl: pictureOfDayEntity.url,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -49,7 +54,7 @@ class PictureOfDayMediaWidget extends StatelessWidget {
         child: Stack(
           children: [
             PhotoView(
-              imageProvider: NetworkImage(
+              imageProvider: CachedNetworkImageProvider(
                 pictureOfDayEntity.hdUrl ?? pictureOfDayEntity.url,
               ),
               minScale: PhotoViewComputedScale.contained,
