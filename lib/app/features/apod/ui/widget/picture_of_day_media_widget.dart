@@ -1,4 +1,5 @@
 import 'package:apod/app/core/extensions/build_context.dart';
+import 'package:apod/app/features/apod/domain/entity/media_type.dart';
 import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,12 @@ class PictureOfDayMediaWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          _ImageWidget(
-            url: pictureOfDayEntity.url,
-            hdUrl: pictureOfDayEntity.hdUrl,
-          ),
+          if (pictureOfDayEntity.mediaType == MediaType.image)
+            _ImageWidget(
+              url: pictureOfDayEntity.url,
+              hdUrl: pictureOfDayEntity.hdUrl,
+            ),
+          if (pictureOfDayEntity.mediaType == MediaType.video) _VideoWidget(),
           if (pictureOfDayEntity.copyright != null)
             Text(
               'Copyright © ${pictureOfDayEntity.copyright!.trim().split('\n').join(' / ')}',
@@ -87,6 +90,24 @@ class _ImageWidget extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _VideoWidget extends StatelessWidget {
+  const _VideoWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: AspectRatio(
+          aspectRatio: 1.8,
+          child: const Placeholder(),
         ),
       ),
     );
