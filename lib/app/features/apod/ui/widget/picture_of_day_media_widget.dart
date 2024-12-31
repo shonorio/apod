@@ -4,6 +4,7 @@ import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart'
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class PictureOfDayMediaWidget extends StatelessWidget {
   const PictureOfDayMediaWidget({super.key, required this.pictureOfDayEntity});
@@ -23,7 +24,10 @@ class PictureOfDayMediaWidget extends StatelessWidget {
               url: pictureOfDayEntity.url,
               hdUrl: pictureOfDayEntity.hdUrl,
             ),
-          if (pictureOfDayEntity.mediaType == MediaType.video) _VideoWidget(),
+          //
+          if (pictureOfDayEntity.mediaType == MediaType.video)
+            _VideoWidget(url: pictureOfDayEntity.url),
+          //
           if (pictureOfDayEntity.copyright != null)
             Text(
               'Copyright © ${pictureOfDayEntity.copyright!.trim().split('\n').join(' / ')}',
@@ -96,8 +100,31 @@ class _ImageWidget extends StatelessWidget {
   }
 }
 
-class _VideoWidget extends StatelessWidget {
-  const _VideoWidget();
+class _VideoWidget extends StatefulWidget {
+  const _VideoWidget({required this.url});
+
+  final String url;
+
+  @override
+  State<_VideoWidget> createState() => _VideoWidgetState();
+}
+
+class _VideoWidgetState extends State<_VideoWidget> {
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    final videoId = YoutubePlayer.convertUrlToId(widget.url) ?? '';
+    _controller = YoutubePlayerController(
+      initialVideoId: videoId,
+      flags: const YoutubePlayerFlags(
+        autoPlay: false,
+        loop: true,
+        mute: false,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +134,19 @@ class _VideoWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.0),
         child: AspectRatio(
           aspectRatio: 16 / 9,
-          child: const Placeholder(),
+          child: YoutubePlayer(
+            controller: _controller,
+            showVideoProgressIndicator: true,
+            progressIndicatorColor: Colors.red,
+          ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
