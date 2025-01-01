@@ -102,5 +102,31 @@ void main() {
         expect(find.text('Retry'), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'shows error state when server error occurs',
+      (tester) async {
+        // arrange
+        when(() => repository.call()).thenAnswer(
+          (_) async => const Failure(ServerSideException()),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ApodPage(controller: controller),
+          ),
+        );
+
+        // act
+        await tester.pump();
+
+        // assert
+        expect(find.text('Error'), findsOneWidget);
+        expect(
+          find.text('An error occurred. Please try again later.'),
+          findsOneWidget,
+        );
+        expect(find.text('Retry'), findsOneWidget);
+      },
+    );
   });
 }

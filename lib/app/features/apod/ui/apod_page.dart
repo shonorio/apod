@@ -25,7 +25,11 @@ class ApodPage extends StatelessWidget {
           ApodPageLoading() => const LoadingStateWidget(),
           ApodPageLoadSuccess(pictureOfDay: final it) =>
             const SizedBox.shrink(),
-          ApodPageError() => const Placeholder(),
+          ApodPageError() => ErrorStateWidget(
+              title: 'Error',
+              subtitle: 'An error occurred. Please try again later.',
+              onPressed: () => controller.fetchPictureOfDay(pictureOfDay),
+            ),
           ApodPageNoInternetConnection() => ErrorStateWidget(
               title: 'Unable to connect to the internet',
               subtitle: 'Please check your connection and try again.',
