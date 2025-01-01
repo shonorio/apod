@@ -2,10 +2,10 @@ import 'package:apod/app/core/result/result.dart';
 import 'package:apod/app/core/storage_provider/storage_provider.dart';
 import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart';
 
-final class FavoritesRepository {
+class FavoritesRepository {
   final StorageProvider _storage;
 
-  FavoritesRepository(this._storage);
+  const FavoritesRepository(this._storage);
 
   AsyncResult<bool, Exception> addFavorite(
       PictureOfDayEntity pictureOfDay) async {
@@ -27,7 +27,7 @@ final class FavoritesRepository {
     }
   }
 
-  AsyncResult<List<PictureOfDayEntity>, Exception> getFavorites() async {
+  AsyncResult<List<PictureOfDayEntity>, Exception> fetchFavorites() async {
     try {
       final favorites = await _storage.fetch();
       return Success(

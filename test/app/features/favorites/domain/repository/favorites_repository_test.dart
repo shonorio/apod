@@ -55,7 +55,7 @@ void main() {
       when(() => mockStorage.fetch()).thenAnswer((_) async => []);
       // act
       final result = await repository
-          .getFavorites()
+          .fetchFavorites()
           .getOrElse((_) => fail('test return Failure other than Success'));
       // assert
       expect(result, isA<List<PictureOfDayEntity>>());
@@ -76,7 +76,7 @@ void main() {
       when(() => mockStorage.fetch()).thenAnswer((_) async => [testJson]);
       // act
       final result = await repository
-          .getFavorites()
+          .fetchFavorites()
           .getOrElse((_) => fail('test return Failure other than Success'));
       // assert
       expect(result, isA<List<PictureOfDayEntity>>());
