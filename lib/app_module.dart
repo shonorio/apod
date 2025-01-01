@@ -32,5 +32,7 @@ class AppModule extends Module {
         transition: TransitionType.noTransition,
       ),
     ]);
+
+    r.child('/favorites/apod', child: (context) => const ApodPage());
   }
 }
