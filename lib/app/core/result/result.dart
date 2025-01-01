@@ -20,6 +20,15 @@ sealed class Result<S extends Object, E extends Exception> {
 
   /// Returns the value of [Failure] or null.
   E? getError();
+
+  /// Transforms the result using [onSuccess] if successful, or [onFailure] if failed.
+  ///
+  /// This method allows you to handle both success and failure cases in a single call.
+  /// Returns the transformed value of type [T].
+  T fold<T>({
+    required T Function(S data) onSuccess,
+    required T Function(E error) onFailure,
+  });
 }
 
 /// Represents a successful result of an operation.
@@ -72,6 +81,13 @@ class Success<S extends Object, E extends Exception> extends Result<S, E> {
 
   @override
   E? getError() => null;
+  @override
+  T fold<T>({
+    required T Function(S data) onSuccess,
+    required T Function(E error) onFailure,
+  }) {
+    return onSuccess(data);
+  }
 }
 
 /// Represents a failed result of an operation.
@@ -102,6 +118,12 @@ class Failure<S extends Object, E extends Exception> extends Result<S, E> {
 
   @override
   E? getError() => _error;
+  @override
+  T fold<T>(
+      {required T Function(S data) onSuccess,
+      required T Function(E error) onFailure}) {
+    return onFailure(_error);
+  }
 }
 
 /// A typedef for asynchronous operations returning a [Result].
@@ -121,4 +143,16 @@ extension AsyncResultExtension<S extends Object, E extends Exception>
   /// Returns the value if the operation succeeded, or computes a fallback value using [onError] if it failed.
   Future<S> getOrElse(S Function(E) onError) =>
       then((result) => result.getOrElse(onError));
+
+  /// Transforms the [AsyncResult] using [onSuccess] if it succeeded, or [onFailure] if it failed.
+  Future<T> fold<T>({
+    required T Function(S data) onSuccess,
+    required T Function(E error) onFailure,
+  }) =>
+      then(
+        (result) => result.fold(
+          onSuccess: onSuccess,
+          onFailure: onFailure,
+        ),
+      );
 }

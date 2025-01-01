@@ -174,6 +174,19 @@ void main() {
 
           expect(success.getError(), isNull);
         });
+
+        test('fold() should call onSuccess with the data', () {
+          // arrange
+          const successData = 'test data';
+          final result = Success<String, Exception>(successData);
+          // act
+          final folded = result.fold(
+            onSuccess: (data) => 'Success: $data',
+            onFailure: (error) => 'Failure: $error',
+          );
+          // assert
+          expect(folded, equals('Success: test data'));
+        });
       });
     });
 
@@ -235,6 +248,19 @@ void main() {
 
           expect(failure.getError(), equals(ex1));
         });
+
+        test('fold() should call onFailure with the error', () {
+          final ex = Exception('error');
+          final failure = Failure(ex);
+
+          expect(
+            failure.fold(
+              onSuccess: (data) => 'Success: $data',
+              onFailure: (error) => 'Failure: $error',
+            ),
+            equals('Failure: Exception: error'),
+          );
+        });
       });
     });
     group(AsyncResult, () {
@@ -280,6 +306,30 @@ void main() {
 
         expect(await asyncResult.getOrElse((error) => fallbackValue),
             equals(fallbackValue));
+      });
+
+      test('fold() should call onSuccess with the data', () async {
+        final value = 'success';
+        final asyncResult =
+            AsyncResult<String, Exception>(() async => Success(value));
+
+        expect(
+            await asyncResult.fold(
+                onSuccess: (data) => 'Success: $data',
+                onFailure: (error) => 'Failure: $error'),
+            equals('Success: success'));
+      });
+
+      test('fold() should call onFailure with the error', () async {
+        final ex = Exception('error');
+        final asyncResult =
+            AsyncResult<String, Exception>(() async => Failure(ex));
+
+        expect(
+            await asyncResult.fold(
+                onSuccess: (data) => 'Success: $data',
+                onFailure: (error) => 'Failure: $error'),
+            equals('Failure: Exception: error'));
       });
     });
   });
