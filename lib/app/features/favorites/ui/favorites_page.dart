@@ -23,7 +23,7 @@ class FavoritesPage extends StatelessWidget {
             FavoritesLoadSuccess(favorites: final it) => FavoritesListItems(
                 pictures: it,
                 onTap: (favorite) => (_) {},
-                onDismissed: (favorite) => (_) {},
+                onDismissed: controller.removeFavorite,
               ),
           };
         },
@@ -32,11 +32,7 @@ class FavoritesPage extends StatelessWidget {
   }
 }
 
-
-
-
-
 // DONE: Show empty state
 // DONE: Show a list of favorite APODs
-// TODO: Add a action to remove a favorite
+// DONE: Add a action to remove a favorite
 // TODO: Add a action to navigate to the APOD page

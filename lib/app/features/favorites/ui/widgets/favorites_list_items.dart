@@ -2,7 +2,7 @@ import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart'
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class FavoritesListItems extends StatelessWidget {
+class FavoritesListItems extends StatefulWidget {
   const FavoritesListItems({
     super.key,
     required this.pictures,
@@ -15,12 +15,33 @@ class FavoritesListItems extends StatelessWidget {
   final List<PictureOfDayEntity> pictures;
 
   @override
+  State<FavoritesListItems> createState() => _FavoritesListItemsState();
+}
+
+class _FavoritesListItemsState extends State<FavoritesListItems> {
+  late List<PictureOfDayEntity> _pictures;
+
+  @override
+  void initState() {
+    super.initState();
+    _pictures = List.from(widget.pictures);
+  }
+
+  @override
+  void didUpdateWidget(FavoritesListItems oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.pictures != widget.pictures) {
+      _pictures = List.from(widget.pictures);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: pictures.length,
+      itemCount: _pictures.length,
       separatorBuilder: (context, index) => const Divider(),
       itemBuilder: (context, index) {
-        final favorite = pictures[index];
+        final favorite = _pictures[index];
         final url = favorite.thumbnailUrl ?? favorite.url;
         return Dismissible(
           key: ValueKey(favorite.date),
@@ -34,7 +55,12 @@ class FavoritesListItems extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          onDismissed: (_) => onDismissed(favorite),
+          onDismissed: (_) {
+            setState(() {
+              _pictures.removeAt(index);
+            });
+            widget.onDismissed(favorite);
+          },
           child: ListTile(
             leading: CachedNetworkImage(
               imageUrl: url,
@@ -44,7 +70,7 @@ class FavoritesListItems extends StatelessWidget {
             ),
             title: Text(favorite.title),
             subtitle: Text(favorite.date.toLocal().toString()),
-            onTap: () => onTap(favorite),
+            onTap: () => widget.onTap(favorite),
           ),
         );
       },
