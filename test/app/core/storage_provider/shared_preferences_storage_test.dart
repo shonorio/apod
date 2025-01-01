@@ -25,7 +25,7 @@ void main() {
 
     // Mock the `getAll` method
     when(() => mockStore.getAll()).thenAnswer((_) async => <String, Object>{
-          'flutter.key_lindo': 'foo', // Ensure the proper prefix
+          'flutter.key_for_get_all': 'foo', // Ensure the proper prefix
         });
 
     // Mock the `setValue` method
@@ -34,6 +34,11 @@ void main() {
 
     sharedPreferences = await SharedPreferences.getInstance();
     storage = SharedPreferencesStorage();
+  });
+
+  tearDown(() async {
+    when(() => mockStore.clear()).thenAnswer((_) async => true);
+    await sharedPreferences.clear();
   });
 
   group(SharedPreferencesStorage, () {
