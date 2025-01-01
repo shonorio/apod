@@ -17,4 +17,9 @@ class FavoritesPageController extends ValueNotifier<FavoritesPageState> {
 
     value = result;
   }
+
+  Future<void> removeFavorite(PictureOfDayEntity favorite) async {
+    await _repository.removeFavorite(favorite);
+    await fetchFavorites();
+  }
 }
