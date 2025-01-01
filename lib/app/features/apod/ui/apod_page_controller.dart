@@ -28,10 +28,9 @@ class ApodPageController extends ValueNotifier<ApodPageState> {
   ApodPageState _parseErrorState(ApodServerException exception) {
     return switch (exception) {
       NetworkException() => ApodPageNoInternetConnection(),
-      // RateLimitException() => ApodPageRateLimitError(),
-      RateLimitException() => ApodPageError(),
-      InvalidRequestException() => ApodPageError(),
-      ServerSideException() => ApodPageError(),
+      RateLimitException() => const ApodPageRateLimitError(),
+      InvalidRequestException() => const ApodPageError(),
+      ServerSideException() => const ApodPageError(),
     };
   }
 }

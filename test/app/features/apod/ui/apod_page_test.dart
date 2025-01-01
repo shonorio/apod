@@ -76,5 +76,31 @@ void main() {
         expect(find.text('Retry'), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'shows rate limit error when rate limit exceeded',
+      (tester) async {
+        // arrange
+        when(() => repository.call()).thenAnswer(
+          (_) async => const Failure(RateLimitException()),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ApodPage(controller: controller),
+          ),
+        );
+
+        // act
+        await tester.pump();
+
+        // assert
+        expect(find.text('Rate limit exceeded'), findsOneWidget);
+        expect(
+            find.text(
+                'You have made too many requests. Please wait a moment before trying again.'),
+            findsOneWidget);
+        expect(find.text('Retry'), findsOneWidget);
+      },
+    );
   });
 }

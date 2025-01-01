@@ -21,3 +21,7 @@ class ApodPageLoadSuccess extends ApodPageState {
 class ApodPageNoInternetConnection extends ApodPageState {
   const ApodPageNoInternetConnection();
 }
+
+class ApodPageRateLimitError extends ApodPageState {
+  const ApodPageRateLimitError();
+}

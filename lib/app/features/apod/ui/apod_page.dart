@@ -31,6 +31,12 @@ class ApodPage extends StatelessWidget {
               subtitle: 'Please check your connection and try again.',
               onPressed: () => controller.fetchPictureOfDay(pictureOfDay),
             ),
+          ApodPageRateLimitError() => ErrorStateWidget(
+              title: 'Rate limit exceeded',
+              subtitle:
+                  'You have made too many requests. Please wait a moment before trying again.',
+              onPressed: () => controller.fetchPictureOfDay(pictureOfDay),
+            ),
         };
       },
     );
