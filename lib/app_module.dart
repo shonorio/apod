@@ -33,6 +33,7 @@ class AppModule extends Module {
       ),
     ]);
 
-    r.child('/favorites/apod', child: (context) => const ApodPage());
+    r.child('/favorites/apod',
+        child: (context) => ApodPage(pictureOfDay: r.args.data));
   }
 }
