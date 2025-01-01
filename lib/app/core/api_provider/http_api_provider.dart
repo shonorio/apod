@@ -29,9 +29,9 @@ final class HttpApiProvider implements ApiProvider {
   /// The [client] parameter is the HTTP client used to send requests.
   /// The [apiConfiguration] parameter provides the base URI for API requests.
   HttpApiProvider({
-    required http.Client client,
+    http.Client? client,
     required ApiConfiguration apiConfiguration,
-  })  : _httpClient = client,
+  })  : _httpClient = client ?? http.Client(),
         _apiConfiguration = apiConfiguration;
 
   final http.Client _httpClient;
