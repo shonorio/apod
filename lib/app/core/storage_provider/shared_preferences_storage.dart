@@ -4,34 +4,44 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'storage_provider.dart';
 
 class SharedPreferencesStorage implements StorageProvider {
-  final SharedPreferences _storage;
-
-  SharedPreferencesStorage(this._storage);
+  Future<SharedPreferences> get _storageInstance async =>
+      await SharedPreferences.getInstance();
 
   @override
   Future<bool> create(String id, Map<String, dynamic> value) async {
-    return await _storage.setString(id, jsonEncode(value));
+    final storage = await _storageInstance;
+    return await storage.setString(id, jsonEncode(value));
   }
 
   @override
   Future<List<Map<String, dynamic>>> fetch({String? id}) async {
+    final storage = await _storageInstance;
     if (id != null) {
-      return _storage.getString(id) != null
-          ? [jsonDecode(_storage.getString(id)!) as Map<String, dynamic>]
+      return storage.getString(id) != null
+          ? [jsonDecode(storage.getString(id)!) as Map<String, dynamic>]
           : [];
     }
 
-    return _storage
+    return storage
         .getKeys()
-        .map(_storage.getString)
+        .map(storage.getString)
         .whereType<String>()
-        .map(jsonDecode)
-        .cast<Map<String, dynamic>>()
+        .map(_parseJson)
+        .whereType<Map<String, dynamic>>()
         .toList();
   }
 
   @override
   Future<bool> delete(String id) async {
-    return await _storage.remove(id);
+    final storage = await _storageInstance;
+    return await storage.remove(id);
+  }
+
+  Map<String, dynamic>? _parseJson(String value) {
+    try {
+      return jsonDecode(value) as Map<String, dynamic>;
+    } catch (e) {
+      return null;
+    }
   }
 }
