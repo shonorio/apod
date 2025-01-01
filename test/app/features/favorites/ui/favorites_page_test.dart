@@ -32,9 +32,10 @@ void main() {
           home: FavoritesPage(controller: controller),
         ),
       );
-
+      await tester.pumpAndSettle();
       // assert
       expect(find.byType(FavoritesEmptyState), findsOneWidget);
+      expect(find.byType(FavoritesListItems), findsNothing);
       expect(find.text('Favorites'), findsOneWidget);
       verify(() => repository.fetchFavorites()).called(1);
     });

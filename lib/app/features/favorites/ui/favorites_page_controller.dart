@@ -11,7 +11,9 @@ class FavoritesPageController extends ValueNotifier<FavoritesPageState> {
 
   Future<void> fetchFavorites() async {
     final result = await _repository.fetchFavorites().fold(
-          onSuccess: (it) => FavoritesLoadSuccess(favorites: it),
+          onSuccess: (it) => it.isEmpty
+              ? const FavoritesNoItems()
+              : FavoritesLoadSuccess(favorites: it),
           onFailure: (_) => const FavoritesNoItems(),
         );
 
