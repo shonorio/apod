@@ -35,8 +35,3 @@ class FavoritesPage extends StatelessWidget {
     );
   }
 }
-
-// DONE: Show empty state
-// DONE: Show a list of favorite APODs
-// DONE: Add a action to remove a favorite
-// DONE: Add a action to navigate to the APOD page
