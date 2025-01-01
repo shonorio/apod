@@ -1,5 +1,6 @@
 import 'package:apod/app/core/result/result.dart';
 import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart';
+import 'package:apod/app/features/apod/domain/errors/apod_server_exception.dart';
 import 'package:apod/app/features/apod/domain/repository/picture_of_day_repository.dart';
 import 'package:apod/app/features/apod/ui/apod_page.dart';
 import 'package:apod/app/features/apod/ui/apod_page_controller.dart';
@@ -47,6 +48,32 @@ void main() {
         expect(find.byType(PictureOfDayMediaWidget), findsNothing);
         expect(find.byType(PictureOfDayTitleWidget), findsNothing);
         expect(find.byType(PictureOfDayExplanationWidget), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'shows no internet connection error when has no connection',
+      (tester) async {
+        // arrange
+        when(() => repository.call()).thenAnswer(
+          (_) async => const Failure(NetworkException()),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ApodPage(controller: controller),
+          ),
+        );
+
+        // act
+        await tester.pump();
+
+        // assert
+        expect(find.text('Unable to connect to the internet'), findsOneWidget);
+        expect(
+          find.text('Please check your connection and try again.'),
+          findsOneWidget,
+        );
+        expect(find.text('Retry'), findsOneWidget);
       },
     );
   });
