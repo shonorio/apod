@@ -1,9 +1,4 @@
-// TODO: show error state
-// TODO: show picture of day
-// TODO: show no internet connection error
-// TODO: show rate limit error
 // TODO: add favorite
-// TODO: remove favorite
 // TODO: show picture of day of selected date
 
 import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart';
@@ -18,6 +13,11 @@ class ApodPageController extends ValueNotifier<ApodPageState> {
   final PictureOfDayRepository _repository;
 
   Future<void> fetchPictureOfDay(PictureOfDayEntity? pictureOfDay) async {
+    if (pictureOfDay != null) {
+      value = ApodPageLoadSuccess(pictureOfDay: pictureOfDay);
+      return;
+    }
+
     final result = await _repository.call();
     value = result.fold(
       onSuccess: (it) => ApodPageLoadSuccess(pictureOfDay: it),
