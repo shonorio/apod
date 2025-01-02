@@ -10,8 +10,11 @@ class FavoritesRepository {
   AsyncResult<bool, Exception> addFavorite(
       PictureOfDayEntity pictureOfDay) async {
     try {
-      final id = pictureOfDay.date.toId();
-      return Success(await _storage.create(id, pictureOfDay.toJson()));
+      final result = await _storage.create(
+        pictureOfDay.date.toId(),
+        pictureOfDay.toJson(),
+      );
+      return Success(result);
     } catch (e) {
       return Failure(Exception('Failed to generate favorite ID'));
     }
@@ -30,10 +33,21 @@ class FavoritesRepository {
   AsyncResult<List<PictureOfDayEntity>, Exception> fetchFavorites() async {
     try {
       final favorites = await _storage.fetch();
-      return Success(
-          favorites.map((e) => PictureOfDayEntity.fromJson(e)).toList());
+      final result = favorites
+          .map(_parsePictureOfDay)
+          .whereType<PictureOfDayEntity>()
+          .toList();
+      return Success(result);
     } catch (e) {
       return Failure(Exception('Failed to get favorites'));
+    }
+  }
+
+  PictureOfDayEntity? _parsePictureOfDay(Map<String, dynamic> json) {
+    try {
+      return PictureOfDayEntity.fromJson(json);
+    } catch (e) {
+      return null;
     }
   }
 }
