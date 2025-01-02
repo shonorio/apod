@@ -7,6 +7,7 @@ import 'package:apod/app/features/apod/ui/apod_page_controller.dart';
 import 'package:apod/app/features/apod/ui/widget/picture_of_day_explanation_widget.dart';
 import 'package:apod/app/features/apod/ui/widget/picture_of_day_media_widget.dart';
 import 'package:apod/app/features/apod/ui/widget/picture_of_day_title_widget.dart';
+import 'package:apod/app/features/favorites/domain/repository/favorites_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -16,21 +17,25 @@ import '../../../../utils/json_util.dart';
 class MockPictureOfDayRepository extends Mock
     implements PictureOfDayRepository {}
 
+class MockFavoritesRepository extends Mock implements FavoritesRepository {}
+
 void main() {
   group(ApodPage, () {
     late ApodPageController controller;
-    late PictureOfDayRepository repository;
+    late PictureOfDayRepository pictureRepository;
+    late FavoritesRepository favoritesRepository;
 
     setUp(() {
-      repository = MockPictureOfDayRepository();
-      controller = ApodPageController(repository);
+      pictureRepository = MockPictureOfDayRepository();
+      favoritesRepository = MockFavoritesRepository();
+      controller = ApodPageController(pictureRepository, favoritesRepository);
     });
 
     testWidgets(
       'shows loading indicator when start page',
       (tester) async {
         // arrange
-        when(() => repository.call()).thenAnswer(
+        when(() => pictureRepository.call()).thenAnswer(
           (_) async => Success(
             PictureOfDayEntity.fromJson(
               JsonUtil.getJson(from: 'apod_server_single_object.json'),
@@ -55,7 +60,7 @@ void main() {
       'shows no internet connection error when has no connection',
       (tester) async {
         // arrange
-        when(() => repository.call()).thenAnswer(
+        when(() => pictureRepository.call()).thenAnswer(
           (_) async => const Failure(NetworkException()),
         );
         await tester.pumpWidget(
@@ -81,7 +86,7 @@ void main() {
       'shows rate limit error when rate limit exceeded',
       (tester) async {
         // arrange
-        when(() => repository.call()).thenAnswer(
+        when(() => pictureRepository.call()).thenAnswer(
           (_) async => const Failure(RateLimitException()),
         );
         await tester.pumpWidget(
@@ -107,7 +112,7 @@ void main() {
       'shows error state when server error occurs',
       (tester) async {
         // arrange
-        when(() => repository.call()).thenAnswer(
+        when(() => pictureRepository.call()).thenAnswer(
           (_) async => const Failure(ServerSideException()),
         );
         await tester.pumpWidget(
@@ -136,7 +141,7 @@ void main() {
         final pictureOfDay = PictureOfDayEntity.fromJson(
           JsonUtil.getJson(from: 'apod_server_single_object.json'),
         );
-        when(() => repository.call())
+        when(() => pictureRepository.call())
             .thenAnswer((_) async => Success(pictureOfDay));
 
         await tester.pumpWidget(
@@ -172,7 +177,7 @@ void main() {
         final pictureOfDay = PictureOfDayEntity.fromJson(
           JsonUtil.getJson(from: 'apod_server_single_object.json'),
         );
-        when(() => repository.call())
+        when(() => pictureRepository.call())
             .thenAnswer((_) async => Success(pictureOfDay));
 
         await tester.pumpWidget(
@@ -191,6 +196,35 @@ void main() {
         final gesture = await tester.startGesture(const Offset(0, 300));
         await gesture.moveBy(const Offset(0, -300));
         await tester.pump();
+      },
+    );
+
+    testWidgets(
+      'adds picture to favorites when favorite button is pressed',
+      (tester) async {
+        // arrange
+        final pictureOfDay = PictureOfDayEntity.fromJson(
+          JsonUtil.getJson(from: 'apod_server_single_object.json'),
+        );
+        when(() => pictureRepository.call())
+            .thenAnswer((_) async => Success(pictureOfDay));
+        when(() => favoritesRepository.addFavorite(pictureOfDay))
+            .thenAnswer((_) async => const Success(true));
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ApodPage(controller: controller),
+          ),
+        );
+
+        await tester.pump(const Duration(seconds: 1));
+
+        // act
+        await tester.tap(find.byIcon(Icons.favorite_border));
+        await tester.pump();
+
+        // assert
+        verify(() => favoritesRepository.addFavorite(pictureOfDay)).called(1);
       },
     );
   });

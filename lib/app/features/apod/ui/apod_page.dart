@@ -31,6 +31,7 @@ class ApodPage extends StatelessWidget {
           ApodPageLoadSuccess(pictureOfDay: final it) => _ApodPageLoadSuccess(
               pictureOfDay: it,
               isRootMode: isRootMode,
+              onAddToFavorites: () => controller.addToFavorites(it),
             ),
           ApodPageError() => ErrorStateWidget(
               title: 'Error',
@@ -58,10 +59,13 @@ class _ApodPageLoadSuccess extends StatelessWidget {
   const _ApodPageLoadSuccess({
     required this.pictureOfDay,
     required this.isRootMode,
+    required this.onAddToFavorites,
   });
 
   final PictureOfDayEntity pictureOfDay;
   final bool isRootMode;
+
+  final void Function() onAddToFavorites;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +75,7 @@ class _ApodPageLoadSuccess extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.favorite_border),
-            onPressed: () {},
+            onPressed: onAddToFavorites,
           ),
           if (isRootMode)
             IconButton(
