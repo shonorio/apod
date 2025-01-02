@@ -15,30 +15,33 @@ class ErrorStateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          title,
-          style: context.textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: context.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          subtitle,
-          style: context.textTheme.bodyMedium,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          width: 200,
-          child: ElevatedButton(
-            onPressed: onPressed,
-            child: const Text('Retry'),
+          const SizedBox(height: 8),
+          Text(
+            subtitle,
+            style: context.textTheme.bodyMedium,
+            textAlign: TextAlign.center,
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+          SizedBox(
+            width: 200,
+            child: ElevatedButton(
+              onPressed: onPressed,
+              child: const Text('Retry'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
