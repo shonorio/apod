@@ -60,7 +60,7 @@ final class PictureOfDayEntity extends Equatable {
       'date': date.toIso8601String(),
       'explanation': explanation,
       'hdurl': hdUrl,
-      'media_type': mediaType.toString(),
+      'media_type': mediaType.value,
       'service_version': serviceVersion,
       'title': title,
       'url': url,
