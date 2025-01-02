@@ -13,8 +13,7 @@ A Flutter mobile application that displays NASA's Astronomy Picture of the Day. 
 
 - Daily updated space imagery from NASA
 - Detailed scientific explanations for each image
-- Browse through historical APOD entries
-- Save favorite images
+- Save favorite Pictures of the Day
 - Dark mode support
 
 ## 🛠️ Getting Started
