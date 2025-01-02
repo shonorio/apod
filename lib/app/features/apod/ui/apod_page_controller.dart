@@ -13,6 +13,7 @@ class ApodPageController extends ValueNotifier<ApodPageState> {
 
   final PictureOfDayRepository _repository;
   final FavoritesRepository _favoritesRepository;
+  DateTime? _selectedDate;
 
   Future<void> fetchPictureOfDay(PictureOfDayEntity? pictureOfDay) async {
     if (pictureOfDay != null) {
@@ -20,7 +21,7 @@ class ApodPageController extends ValueNotifier<ApodPageState> {
       return;
     }
 
-    final result = await _repository.call();
+    final result = await _repository.call(_selectedDate);
     value = result.fold(
       onSuccess: (it) => ApodPageLoadSuccess(pictureOfDay: it),
       onFailure: (it) => _parseErrorState(it),

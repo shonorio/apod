@@ -35,7 +35,7 @@ void main() {
       'shows loading indicator when start page',
       (tester) async {
         // arrange
-        when(() => pictureRepository.call()).thenAnswer(
+        when(() => pictureRepository.call(null)).thenAnswer(
           (_) async => Success(
             PictureOfDayEntity.fromJson(
               JsonUtil.getJson(from: 'apod_server_single_object.json'),
@@ -60,7 +60,7 @@ void main() {
       'shows no internet connection error when has no connection',
       (tester) async {
         // arrange
-        when(() => pictureRepository.call()).thenAnswer(
+        when(() => pictureRepository.call(null)).thenAnswer(
           (_) async => const Failure(NetworkException()),
         );
         await tester.pumpWidget(
@@ -86,7 +86,7 @@ void main() {
       'shows rate limit error when rate limit exceeded',
       (tester) async {
         // arrange
-        when(() => pictureRepository.call()).thenAnswer(
+        when(() => pictureRepository.call(null)).thenAnswer(
           (_) async => const Failure(RateLimitException()),
         );
         await tester.pumpWidget(
@@ -112,7 +112,7 @@ void main() {
       'shows error state when server error occurs',
       (tester) async {
         // arrange
-        when(() => pictureRepository.call()).thenAnswer(
+        when(() => pictureRepository.call(null)).thenAnswer(
           (_) async => const Failure(ServerSideException()),
         );
         await tester.pumpWidget(
@@ -141,7 +141,7 @@ void main() {
         final pictureOfDay = PictureOfDayEntity.fromJson(
           JsonUtil.getJson(from: 'apod_server_single_object.json'),
         );
-        when(() => pictureRepository.call())
+        when(() => pictureRepository.call(null))
             .thenAnswer((_) async => Success(pictureOfDay));
 
         await tester.pumpWidget(
@@ -177,7 +177,7 @@ void main() {
         final pictureOfDay = PictureOfDayEntity.fromJson(
           JsonUtil.getJson(from: 'apod_server_single_object.json'),
         );
-        when(() => pictureRepository.call())
+        when(() => pictureRepository.call(null))
             .thenAnswer((_) async => Success(pictureOfDay));
 
         await tester.pumpWidget(
@@ -206,7 +206,7 @@ void main() {
         final pictureOfDay = PictureOfDayEntity.fromJson(
           JsonUtil.getJson(from: 'apod_server_single_object.json'),
         );
-        when(() => pictureRepository.call())
+        when(() => pictureRepository.call(null))
             .thenAnswer((_) async => Success(pictureOfDay));
         when(() => favoritesRepository.addFavorite(pictureOfDay))
             .thenAnswer((_) async => const Success(true));
