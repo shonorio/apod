@@ -1,9 +1,12 @@
-import 'package:apod/app/core/extensions/build_context.dart';
 import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart';
 import 'package:apod/app/features/apod/ui/apod_page_controller.dart';
 import 'package:apod/app/features/apod/ui/apod_page_state.dart';
+import 'package:apod/app/features/apod/ui/widget/adaptive_date_picker.dart';
 import 'package:apod/app/features/apod/ui/widget/error_state_widget.dart';
 import 'package:apod/app/features/apod/ui/widget/loading_state_widget.dart';
+import 'package:apod/app/features/apod/ui/widget/picture_of_day_explanation_widget.dart';
+import 'package:apod/app/features/apod/ui/widget/picture_of_day_media_widget.dart';
+import 'package:apod/app/features/apod/ui/widget/picture_of_day_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class ApodPage extends StatelessWidget {
@@ -18,13 +21,17 @@ class ApodPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isRootMode = pictureOfDay == null;
+
     return ValueListenableBuilder(
       valueListenable: controller..fetchPictureOfDay(pictureOfDay),
       builder: (context, state, child) {
         return switch (state) {
           ApodPageLoading() => const LoadingStateWidget(),
-          ApodPageLoadSuccess(pictureOfDay: final it) =>
-            const SizedBox.shrink(),
+          ApodPageLoadSuccess(pictureOfDay: final it) => _ApodPageLoadSuccess(
+              pictureOfDay: it,
+              isRootMode: isRootMode,
+            ),
           ApodPageError() => ErrorStateWidget(
               title: 'Error',
               subtitle: 'An error occurred. Please try again later.',
@@ -43,6 +50,58 @@ class ApodPage extends StatelessWidget {
             ),
         };
       },
+    );
+  }
+}
+
+class _ApodPageLoadSuccess extends StatelessWidget {
+  const _ApodPageLoadSuccess({
+    required this.pictureOfDay,
+    required this.isRootMode,
+  });
+
+  final PictureOfDayEntity pictureOfDay;
+  final bool isRootMode;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Picture of the Day'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite_border),
+            onPressed: () {},
+          ),
+          if (isRootMode)
+            IconButton(
+              icon: const Icon(Icons.calendar_today),
+              onPressed: () async {
+                final firstApodPublishedDate = DateTime(1995, 6, 16);
+                final selectedDate = await AdaptiveDatePicker.show(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: firstApodPublishedDate,
+                  lastDate: DateTime.now(),
+                );
+
+                if (selectedDate != null) {
+                  print(selectedDate);
+                }
+              },
+            ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            PictureOfDayMediaWidget(pictureOfDayEntity: pictureOfDay),
+            PictureOfDayTitleWidget(pictureOfDayEntity: pictureOfDay),
+            PictureOfDayExplanationWidget(pictureOfDayEntity: pictureOfDay),
+          ],
+        ),
+      ),
     );
   }
 }

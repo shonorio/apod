@@ -128,5 +128,70 @@ void main() {
         expect(find.text('Retry'), findsOneWidget);
       },
     );
+
+    testWidgets(
+      'shows success state when data loads successfully',
+      (tester) async {
+        // arrange
+        final pictureOfDay = PictureOfDayEntity.fromJson(
+          JsonUtil.getJson(from: 'apod_server_single_object.json'),
+        );
+        when(() => repository.call())
+            .thenAnswer((_) async => Success(pictureOfDay));
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ApodPage(controller: controller),
+          ),
+        );
+
+        // act
+        await tester.pump(const Duration(seconds: 1));
+
+        // assert
+        expect(find.byType(PictureOfDayMediaWidget), findsOneWidget);
+        expect(find.byType(PictureOfDayTitleWidget), findsOneWidget);
+        expect(find.byType(PictureOfDayExplanationWidget), findsOneWidget);
+
+        // verify specific content
+        expect(
+            find.text('Methane Bubbles Frozen in Lake Baikal'), findsOneWidget);
+        expect(find.text('Copyright © Kristina Makeeva'), findsOneWidget);
+        expect(
+          find.textContaining(
+              'What are these bubbles frozen into Lake Baikal?'),
+          findsOneWidget,
+        );
+      },
+    );
+
+    testWidgets(
+      'allows scrolling when content overflows',
+      (tester) async {
+        // arrange
+        final pictureOfDay = PictureOfDayEntity.fromJson(
+          JsonUtil.getJson(from: 'apod_server_single_object.json'),
+        );
+        when(() => repository.call())
+            .thenAnswer((_) async => Success(pictureOfDay));
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: ApodPage(controller: controller),
+          ),
+        );
+
+        // act
+        await tester.pump(const Duration(seconds: 1));
+
+        // assert
+        expect(find.byType(SingleChildScrollView), findsOneWidget);
+
+        // verify that the page is scrollable
+        final gesture = await tester.startGesture(const Offset(0, 300));
+        await gesture.moveBy(const Offset(0, -300));
+        await tester.pump();
+      },
+    );
   });
 }
