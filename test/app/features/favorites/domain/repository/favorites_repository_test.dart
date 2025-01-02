@@ -27,6 +27,7 @@ void main() {
   group(FavoritesRepository, () {
     test('addFavorite success', () async {
       // arrange
+      final testId = testPicture.date.millisecondsSinceEpoch.toString();
       when(() => mockStorage.create(any(), any()))
           .thenAnswer((_) async => true);
       // act
@@ -35,11 +36,12 @@ void main() {
           .getOrElse((_) => fail('test return Failure other than Success'));
       // assert
       expect(result, isTrue);
-      verify(() => mockStorage.create('1735441200000', any())).called(1);
+      verify(() => mockStorage.create(testId, any())).called(1);
     });
 
     test('removeFavorite success', () async {
       // arrange
+      final testId = testPicture.date.millisecondsSinceEpoch.toString();
       when(() => mockStorage.delete(any())).thenAnswer((_) async => true);
       // act
       final result = await repository
@@ -47,7 +49,7 @@ void main() {
           .getOrElse((_) => fail('test return Failure other than Success'));
       // assert
       expect(result, isTrue);
-      verify(() => mockStorage.delete('1735441200000')).called(1);
+      verify(() => mockStorage.delete(testId)).called(1);
     });
 
     test('getFavorites returns empty list of favorites', () async {
