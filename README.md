@@ -4,11 +4,14 @@ A Flutter mobile application that displays NASA's Astronomy Picture of the Day. 
 
 ## 📱 App Preview  
 
-### 🖼️ Astronomy Picture of the Day  
-![Picture of the Day Screen](./docs/assets/picture_of_the_day.png)  
-
-### ⭐ Favorites  
-![Favorites Screen](./docs/assets/favorites.png)  
+<div style="display: flex; gap: 20px;">
+  <div>
+    <img src="./docs/assets/picture_of_the_day.png" width="300" alt="Picture of the Day Screen">
+  </div>
+  <div>
+    <img src="./docs/assets/favorites.png" width="300" alt="Favorites Screen">
+  </div>
+</div>
 
 ## 🚀 Features
 
