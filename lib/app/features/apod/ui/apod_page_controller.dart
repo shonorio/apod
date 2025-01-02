@@ -16,6 +16,7 @@ class ApodPageController extends ValueNotifier<ApodPageState> {
   DateTime? _selectedDate;
 
   Future<void> fetchPictureOfDay(PictureOfDayEntity? pictureOfDay) async {
+    value = const ApodPageLoading();
     if (pictureOfDay != null) {
       value = ApodPageLoadSuccess(pictureOfDay: pictureOfDay);
       return;
@@ -30,6 +31,11 @@ class ApodPageController extends ValueNotifier<ApodPageState> {
 
   Future<void> addToFavorites(PictureOfDayEntity pictureOfDay) async {
     await _favoritesRepository.addFavorite(pictureOfDay);
+  }
+
+  void selectDate(DateTime date) {
+    _selectedDate = date;
+    fetchPictureOfDay(null);
   }
 
   ApodPageState _parseErrorState(ApodServerException exception) {

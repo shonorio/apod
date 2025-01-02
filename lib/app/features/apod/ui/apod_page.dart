@@ -32,6 +32,7 @@ class ApodPage extends StatelessWidget {
               pictureOfDay: it,
               isRootMode: isRootMode,
               onAddToFavorites: () => controller.addToFavorites(it),
+              onSelectDate: (date) => controller.selectDate(date),
             ),
           ApodPageError() => ErrorStateWidget(
               title: 'Error',
@@ -60,13 +61,14 @@ class _ApodPageLoadSuccess extends StatelessWidget {
     required this.pictureOfDay,
     required this.isRootMode,
     required this.onAddToFavorites,
+    required this.onSelectDate,
   });
 
   final PictureOfDayEntity pictureOfDay;
   final bool isRootMode;
 
   final void Function() onAddToFavorites;
-
+  final void Function(DateTime) onSelectDate;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +92,7 @@ class _ApodPageLoadSuccess extends StatelessWidget {
                 );
 
                 if (selectedDate != null) {
-                  print(selectedDate);
+                  onSelectDate(selectedDate);
                 }
               },
             ),
