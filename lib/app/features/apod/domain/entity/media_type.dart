@@ -11,4 +11,7 @@ enum MediaType {
       orElse: () => throw ArgumentError('Invalid media type: $value'),
     );
   }
+
+  @override
+  String toString() => value;
 }
