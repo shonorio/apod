@@ -1,5 +1,3 @@
-// TODO: show picture of day of selected date
-
 import 'package:apod/app/features/apod/domain/entity/picture_of_day_entity.dart';
 import 'package:apod/app/features/apod/domain/errors/apod_server_exception.dart';
 import 'package:apod/app/features/apod/domain/repository/picture_of_day_repository.dart';
