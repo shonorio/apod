@@ -1,18 +1,23 @@
-# APOD - Astronomy Picture of the Day
+# 🌌 APOD - Astronomy Picture of the Day  
 
 A Flutter mobile application that displays NASA's Astronomy Picture of the Day. Get daily doses of stunning space imagery along with expert explanations.
 
-![](./docs//assets/picture_of_the_day.png)
-![](./docs//assets/favorites.png)
+## 📱 App Preview  
 
-## Features
+### 🖼️ Astronomy Picture of the Day  
+![Picture of the Day Screen](./docs/assets/picture_of_the_day.png)  
+
+### ⭐ Favorites  
+![Favorites Screen](./docs/assets/favorites.png)  
+
+## 🚀 Features
 
 - Daily updated space imagery from NASA
 - Detailed scientific explanations for each image
 - Browse through historical APOD entries
 - Save favorite images locally
 
-## Getting Started
+## 🛠️ Getting Started
 
 1. Clone this repository
 2. Get your NASA API key from [NASA API Portal](https://api.nasa.gov/)
@@ -23,13 +28,13 @@ A Flutter mobile application that displays NASA's Astronomy Picture of the Day. 
 4. Run `flutter pub get` to install dependencies
 5. Launch the app with `flutter run`
 
-## Dependencies
+## 🔧 Dependencies
 
 - flutter_modular: For modular app architecture
 - http: For API requests
 - cached_network_image: For image caching
 
-## Project Structure
+## 📂 Project Structure
 
 ```
 lib/
@@ -101,7 +106,7 @@ Each feature is organized to be self-contained, making it easier to:
 - Test functionality in isolation
 - Scale the application smoothly
 
-## State Management
+## 🧠 State Management
 
 This project uses a lightweight state management approach based on Flutter's `ValueNotifier`:
 
@@ -147,15 +152,15 @@ Benefits of this approach:
 - Type-safe state transitions
 - Minimal boilerplate code
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
+## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+## 🤝 Acknowledgments
 
 - NASA for providing the APOD API
 - [Flutter](https://flutter.dev/) for the amazing framework
