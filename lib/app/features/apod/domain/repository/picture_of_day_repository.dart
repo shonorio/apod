@@ -12,9 +12,12 @@ class PictureOfDayRepository {
 
   final ApiProvider _apiProvider;
 
-  AsyncResult<PictureOfDayEntity, ApodServerException> call() async {
+  AsyncResult<PictureOfDayEntity, ApodServerException> call(
+      DateTime? selectedDate) async {
     try {
-      final response = await _apiProvider.request(PictureOfDayRequestBuilder());
+      final response = await _apiProvider.request(
+        PictureOfDayRequestBuilder(date: selectedDate),
+      );
       return Success(PictureOfDayEntity.fromJson(response.toJson()));
     } on ApiProviderRequestException catch (e) {
       final errorJson = e.apiResponse.toJson();

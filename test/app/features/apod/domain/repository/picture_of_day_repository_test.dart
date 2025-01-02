@@ -45,7 +45,7 @@ void main() {
         ),
       );
       // act
-      final result = await repository()
+      final result = await repository(null)
           .getOrElse((_) => fail('test return Failure other than Success'));
       // assert
       expect(result, equals(entity));
@@ -65,7 +65,7 @@ void main() {
         ),
       );
       // act
-      final result = await repository();
+      final result = await repository(null);
       // assert
       expect(result.getError(), isA<InvalidRequestException>());
     });
@@ -78,7 +78,7 @@ void main() {
         ApiProviderRateLimitException('Rate limit exceeded'),
       );
       // act
-      final result = await repository();
+      final result = await repository(null);
       // assert
       expect(result.getError(), isA<RateLimitException>());
     });
@@ -91,7 +91,7 @@ void main() {
         ApiProviderServerException(ApiResponse(statusCode: 500)),
       );
       // act
-      final result = await repository();
+      final result = await repository(null);
       // assert
       expect(result.getError(), isA<ServerSideException>());
     });
@@ -109,7 +109,7 @@ void main() {
         ),
       );
       // act
-      final result = await repository();
+      final result = await repository(null);
       // assert
       expect(result.getError(), isA<NetworkException>());
     });
