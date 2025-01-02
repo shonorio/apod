@@ -26,19 +26,6 @@ A Flutter mobile application that displays NASA's Astronomy Picture of the Day. 
 - http: For API requests
 - cached_network_image: For image caching
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- NASA for providing the APOD API
-- [Flutter](https://flutter.dev/) for the amazing framework
-
 ## Project Structure
 
 ```
@@ -156,3 +143,16 @@ Benefits of this approach:
 - Clear separation of concerns
 - Type-safe state transitions
 - Minimal boilerplate code
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- NASA for providing the APOD API
+- [Flutter](https://flutter.dev/) for the amazing framework
