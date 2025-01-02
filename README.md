@@ -2,6 +2,9 @@
 
 A Flutter mobile application that displays NASA's Astronomy Picture of the Day. Get daily doses of stunning space imagery along with expert explanations.
 
+![](./docs//assets/picture_of_the_day.png)
+![](./docs//assets/favorites.png)
+
 ## Features
 
 - Daily updated space imagery from NASA
